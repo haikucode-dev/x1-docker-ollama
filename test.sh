@@ -24,14 +24,29 @@ fi
 echo "Testing Ollama API connection..."
 
 # Test the API connection
-STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $API_TOKEN" http://localhost/api/tags)
+# Note: If this curl command fails due to set -e, you'll only see the first echo
+# We use || true to prevent early exit and capture the actual error
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $API_TOKEN" http://localhost/api/tags || echo "FAILED")
 
-if [ "$STATUS" -eq 200 ]; then
+if [ "$STATUS" = "FAILED" ]; then
+    echo "❌ API connection failed! The curl command couldn't complete."
+    echo "This is likely due to:"
+    echo "  1. Network connectivity issues"
+    echo "  2. The Ollama service not running at all"
+    echo "=========================================="
+    echo "To view logs: docker-compose logs"
+    echo "To restart: docker-compose restart"
+    exit 1
+elif [ "$STATUS" -eq 200 ]; then
     echo "✅ API connection successful! (Status code: $STATUS)"
     echo "Fetching available models..."
 
     # Get available models
-    MODELS=$(curl -s -H "Authorization: Bearer $API_TOKEN" http://localhost/api/tags)
+    MODELS=$(curl -s -H "Authorization: Bearer $API_TOKEN" http://localhost/api/tags || echo "FAILED")
+    if [ "$MODELS" = "FAILED" ]; then
+        echo "❌ Failed to fetch models despite successful connection test."
+        exit 1
+    fi
     echo "$MODELS"
 
     echo "=========================================="
