@@ -1,0 +1,23 @@
+{
+    # Import environment variables
+    env API_TOKEN
+}
+
+:80 {
+    @authenticated {
+        header Authorization "Bearer {$API_TOKEN}"
+    }
+
+    # Rest of configuration remains the same
+    @unauthenticated {
+        not header Authorization "Bearer {$API_TOKEN}"
+    }
+
+    handle @unauthenticated {
+        respond "Unauthorized: Valid API token required" 401
+    }
+
+    handle @authenticated {
+        reverse_proxy ollama:11434
+    }
+}
