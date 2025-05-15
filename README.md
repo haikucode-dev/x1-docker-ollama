@@ -21,6 +21,24 @@ This command will:
 1. Clone the repository to your home directory
 2. Set up a secure random API token
 3. Start the Ollama service
+4. On Ubuntu systems, offer to configure autostart on boot (systemd)
+
+## API Authentication
+
+The API is protected with Bearer token authentication. The setup script automatically generates a secure token and saves it in the `.env` file.
+
+To interact with the API, include the token in your requests:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_TOKEN" http://localhost/api/tags
+```
+
+## Using Ollama commands
+
+```bash
+docker exec -it ollama ollama run phi4:latest
+docker exec ollama ollama list
+```
 
 ## Manual Installation
 
@@ -45,16 +63,6 @@ If you prefer to install manually:
    ```bash
    ./test.sh
    ```
-
-## API Authentication
-
-The API is protected with Bearer token authentication. The setup script automatically generates a secure token and saves it in the `.env` file.
-
-To interact with the API, include the token in your requests:
-
-```bash
-curl -H "Authorization: Bearer YOUR_API_TOKEN" http://localhost/api/tags
-```
 
 ## Run on Startup (Ubuntu)
 
