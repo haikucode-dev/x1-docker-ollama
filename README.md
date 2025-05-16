@@ -10,6 +10,8 @@ A `docker` setup to run an [Ollama](https://ollama.com/) instance protected with
 - **Automated Setup**: One-line installation command to set everything up.
 - **Testing Tools**: Verify your installation with a simple test script.
 - **Autostart Support**: Systemd service setup for automatic startup on boot.
+- **Tailscale Funnel**: Expose your Ollama instance securely over the internet using Tailscale Funnel.
+- **Clean Uninstall**: Easily remove all components with a single script.
 
 ## Quick Install (One-Line Command)
 
@@ -95,6 +97,58 @@ sudo systemctl start ollama-docker.service
 sudo systemctl disable ollama-docker.service
 ```
 
+## Expose Ollama with Tailscale Funnel
+
+To expose your Ollama instance securely over the internet using Tailscale Funnel, run:
+
+```bash
+sudo ./tailscale-setup.sh
+```
+
+This script will:
+1. Install the Ollama Docker service (similar to systemd-setup.sh)
+2. Configure a Tailscale Funnel service that exposes port 80 with HTTPS
+3. Set up both services to start automatically on boot and restart on failure
+
+### Prerequisites
+
+- [Tailscale](https://tailscale.com/) must be installed and logged in
+- You need a Tailscale account with Funnel capability enabled
+
+### Managing Tailscale Funnel
+
+After setup, you can manage the Tailscale Funnel service with:
+
+```bash
+# Check Tailscale Funnel status
+sudo systemctl status ollama-tailscale-funnel.service
+
+# Stop Tailscale Funnel
+sudo systemctl stop ollama-tailscale-funnel.service
+
+# Start Tailscale Funnel
+sudo systemctl start ollama-tailscale-funnel.service
+
+# View your Funnel URL
+tailscale funnel status
+```
+
+## Uninstallation
+
+To completely remove all components installed by this repository, run:
+
+```bash
+sudo ./uninstall.sh
+```
+
+This script will:
+1. Stop and remove all systemd services (Ollama Docker and Tailscale Funnel)
+2. Reset any Tailscale Funnel configurations
+3. Stop and remove Docker containers and volumes
+4. Provide instructions for removing the repository files
+
+The uninstall script includes confirmation prompts to prevent accidental deletions.
+
 ---
 
-*Note: The systemd setup script automatically detects your repository path and docker location, so no manual configuration is needed.*
+*Note: The setup scripts automatically detect your repository path and required executables, so no manual configuration is needed.*

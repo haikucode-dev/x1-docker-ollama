@@ -28,7 +28,7 @@ else
 fi
 
 # Make scripts executable
-chmod +x setup.sh test.sh systemd-setup.sh
+chmod +x setup.sh test.sh systemd-setup.sh tailscale-setup.sh uninstall.sh
 
 # Run setup script
 echo "Running setup script..."
@@ -51,6 +51,29 @@ if [ -f /etc/lsb-release ] && grep -q "Ubuntu" /etc/lsb-release; then
                 echo "Sudo permission required to set up systemd service."
                 sudo ./systemd-setup.sh
             fi
+
+            # Offer to set up Tailscale Funnel
+            if command -v tailscale &> /dev/null; then
+                echo "Tailscale detected. Would you like to set up Tailscale Funnel to expose Ollama over HTTPS? (y/n)"
+                read -r setup_tailscale
+
+                if [[ "$setup_tailscale" =~ ^[Yy]$ ]]; then
+                    echo "Setting up Tailscale Funnel..."
+                    if [ "$EUID" -eq 0 ]; then
+                        # Already running as root
+                        ./tailscale-setup.sh
+                    else
+                        # Need sudo
+                        echo "Sudo permission required to set up Tailscale Funnel."
+                        sudo ./tailscale-setup.sh
+                    fi
+                else
+                    echo "Skipping Tailscale Funnel setup. You can set it up later with: sudo ./tailscale-setup.sh"
+                fi
+            else
+                echo "Tailscale not detected. If you'd like to expose Ollama with Tailscale Funnel,"
+                echo "install Tailscale first and then run: sudo ./tailscale-setup.sh"
+            fi
         else
             echo "Skipping systemd setup. You can set it up later with: sudo ./systemd-setup.sh"
         fi
@@ -58,6 +81,7 @@ if [ -f /etc/lsb-release ] && grep -q "Ubuntu" /etc/lsb-release; then
         # Non-interactive mode - provide instructions but don't prompt
         echo "Ubuntu detected but running in non-interactive mode."
         echo "To enable autostart, run: cd $INSTALL_DIR && sudo ./systemd-setup.sh"
+        echo "To set up Tailscale Funnel, run: cd $INSTALL_DIR && sudo ./tailscale-setup.sh"
     fi
 fi
 
@@ -71,6 +95,11 @@ if ! [ -f /etc/lsb-release ] || ! grep -q "Ubuntu" /etc/lsb-release || [[ ! "$se
         :
     else
         echo "To set up autostart on boot (Ubuntu): cd $INSTALL_DIR && sudo ./systemd-setup.sh"
+
+        # Only suggest Tailscale setup if Tailscale is installed
+        if command -v tailscale &> /dev/null; then
+            echo "To set up Tailscale Funnel: cd $INSTALL_DIR && sudo ./tailscale-setup.sh"
+        fi
     fi
 fi
 echo "=========================================="
