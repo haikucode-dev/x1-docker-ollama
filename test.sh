@@ -34,8 +34,8 @@ if [ "$STATUS" = "FAILED" ]; then
     echo "  1. Network connectivity issues"
     echo "  2. The Ollama service not running at all"
     echo "=========================================="
-    echo "To view logs: docker-compose logs"
-    echo "To restart: docker-compose restart"
+    echo "To view logs: docker compose logs"
+    echo "To restart: docker compose restart"
     exit 1
 elif [ "$STATUS" -eq 200 ]; then
     echo "✅ API connection successful! (Status code: $STATUS)"
@@ -58,10 +58,10 @@ elif [ "$STATUS" -eq 200 ]; then
 else
     echo "❌ API connection failed! (Status code: $STATUS)"
     echo "Please check that:"
-    echo "  1. The Ollama service is running (docker-compose ps)"
+    echo "  1. The Ollama service is running (docker compose ps)"
     echo "  2. Your API token is correct"
     echo "  3. The Caddy reverse proxy is properly configured"
     echo "=========================================="
-    echo "To view logs: docker-compose logs"
-    echo "To restart: docker-compose restart"
+    echo "To view logs: docker compose logs"
+    echo "To restart: docker compose restart"
 fi

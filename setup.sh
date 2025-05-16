@@ -6,25 +6,10 @@ echo "=========================================="
 echo "Ollama Docker Setup with API Authentication"
 echo "=========================================="
 
-# Check for docker and docker-compose
+# Check for docker
 if ! command -v docker &> /dev/null; then
     echo "Error: Docker is not installed. Please install Docker first."
     exit 1
-fi
-
-if ! command -v docker-compose &> /dev/null; then
-    echo "Docker Compose not found. Installing Docker Compose..."
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-    echo "✅ Docker Compose installed successfully"
-    # Verify the installation
-    docker-compose --version
-    if [ $? -eq 0 ]; then
-        echo "✅ Docker Compose installation verified"
-    else
-        echo "❌ Docker Compose installation failed"
-        exit 1
-    fi
 fi
 
 # Create .env file if it doesn't exist
@@ -42,7 +27,7 @@ fi
 
 # Start the service
 echo "Starting Ollama service..."
-docker-compose up -d
+docker compose up -d
 
 echo "=========================================="
 echo "✅ Setup complete!"

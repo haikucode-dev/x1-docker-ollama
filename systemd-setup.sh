@@ -14,7 +14,7 @@ fi
 
 # Get the current directory
 REPO_PATH=$(pwd)
-DOCKER_COMPOSE_PATH=$(which docker-compose)
+DOCKER_PATH=$(which docker)
 
 # Create systemd service file
 SERVICE_FILE="/etc/systemd/system/ollama-docker.service"
@@ -30,8 +30,8 @@ Requires=docker.service
 Type=oneshot
 RemainAfterExit=yes
 WorkingDirectory=${REPO_PATH}
-ExecStart=${DOCKER_COMPOSE_PATH} up -d
-ExecStop=${DOCKER_COMPOSE_PATH} down
+ExecStart=${DOCKER_PATH} compose up -d
+ExecStop=${DOCKER_PATH} compose down
 TimeoutStartSec=0
 
 [Install]

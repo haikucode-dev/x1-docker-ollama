@@ -1,8 +1,8 @@
 # x1-docker-ollama
 
-# Docker Compose Setup for Ollama with API Authentication
+# Docker Setup for Ollama with API Authentication
 
-A `docker-compose` setup to run an [Ollama](https://ollama.com/) instance protected with API authentication (Bearer token) on a Minisforum X1 Pro with AMD ROCm GPU support.
+A `docker` setup to run an [Ollama](https://ollama.com/) instance protected with API authentication (Bearer token) on a Minisforum X1 Pro with AMD ROCm GPU support.
 
 ## Features
 - **Ollama in Docker**: Easily run Ollama in a containerized environment.
@@ -57,7 +57,7 @@ If you prefer to install manually:
 
    This will:
    - Generate a secure random API token and save it to `.env`
-   - Start the Ollama service with docker-compose
+   - Start the Ollama service with docker compose
 
 3. Test your installation:
    ```bash
@@ -97,4 +97,4 @@ sudo systemctl disable ollama-docker.service
 
 ---
 
-*Note: The systemd setup script automatically detects your repository path and docker-compose location, so no manual configuration is needed.*
+*Note: The systemd setup script automatically detects your repository path and docker location, so no manual configuration is needed.*
