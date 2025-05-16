@@ -12,6 +12,9 @@ A `docker` setup to run an [Ollama](https://ollama.com/) instance protected with
 - **Autostart Support**: Systemd service setup for automatic startup on boot.
 - **Tailscale Funnel**: Expose your Ollama instance securely over the internet using Tailscale Funnel.
 - **Clean Uninstall**: Easily remove all components with a single script.
+- **Model Download**: Option to download gemma3:1b during setup.
+- **Status Monitoring**: Comprehensive status overview of all services.
+- **Quick Restart**: Restart all services with a single command.
 
 ## Quick Install (One-Line Command)
 
@@ -132,6 +135,39 @@ sudo systemctl start ollama-tailscale-funnel.service
 # View your Funnel URL
 tailscale funnel status
 ```
+
+## System Status
+
+To get a comprehensive overview of all services, their status, and configuration, run:
+
+```bash
+./status.sh
+```
+
+This script provides information about:
+- Docker and container status
+- Installed Ollama models
+- Systemd services status and autostart configuration
+- Tailscale and Funnel configuration
+- API connectivity
+
+It's a great way to quickly diagnose issues or verify that everything is running correctly.
+
+## Restarting Services
+
+To restart all components of the system (Docker containers and systemd services), run:
+
+```bash
+sudo ./restart.sh
+```
+
+This script will:
+- Restart the Ollama Docker service if installed
+- Restart the Tailscale Funnel service if installed
+- Restart Docker containers directly if systemd services aren't available
+- Reset and reconfigure Tailscale Funnel if needed
+
+Running without sudo will still restart Docker containers but may not be able to restart systemd services.
 
 ## Uninstallation
 

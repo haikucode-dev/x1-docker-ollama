@@ -28,7 +28,7 @@ else
 fi
 
 # Make scripts executable
-chmod +x setup.sh test.sh systemd-setup.sh tailscale-setup.sh uninstall.sh
+chmod +x setup.sh test.sh systemd-setup.sh tailscale-setup.sh uninstall.sh status.sh restart.sh
 
 # Run setup script
 echo "Running setup script..."
