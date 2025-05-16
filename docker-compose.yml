@@ -12,8 +12,10 @@ services:
     devices:
       - /dev/kfd
       - /dev/dri
+    environment:
+      # Allow Obsidian's plugins to talk to Ollama 
+      - OLLAMA_ORIGINS=capacitor://*
     # Uncomment and set these if your AMD GPU requires them:
-    # environment:
     #   HSA_OVERRIDE_GFX_VERSION: "10.3.0"
     #   HCC_AMDGPU_TARGET: "gfx1030"
 
