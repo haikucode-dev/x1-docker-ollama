@@ -59,6 +59,8 @@ Requires=ollama-docker.service
 [Service]
 Type=simple
 ExecStart=${TAILSCALE_PATH} funnel --https=443 localhost:80
+ExecStartPost=/bin/sleep 3
+ExecStartPost=/bin/systemctl restart NetworkManager
 Restart=on-failure
 RestartSec=5
 
@@ -81,6 +83,7 @@ systemctl start ollama-tailscale-funnel.service
 echo "=========================================="
 echo "✅ Setup complete!"
 echo "Ollama Docker and Tailscale Funnel services are now configured."
+echo "NetworkManager will be automatically restarted when Tailscale Funnel starts."
 echo
 echo "Service Status:"
 echo "  - Ollama Docker: $(systemctl is-active ollama-docker.service)"
