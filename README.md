@@ -5,16 +5,38 @@
 A `docker` setup to run an [Ollama](https://ollama.com/) instance protected with API authentication (Bearer token) on a Minisforum X1 Pro with AMD ROCm GPU support.
 
 ## Features
-- **Ollama in Docker**: Easily run Ollama in a containerized environment.
-- **API Auth**: Secured with Bearer token authentication.
-- **Automated Setup**: One-line installation command to set everything up.
-- **Testing Tools**: Verify your installation with a simple test script.
-- **Autostart Support**: Systemd service setup for automatic startup on boot.
-- **Tailscale Funnel**: Expose your Ollama instance securely over the internet using Tailscale Funnel.
-- **Clean Uninstall**: Easily remove all components with a single script.
-- **Model Download**: Option to download gemma3:1b during setup.
-- **Status Monitoring**: Comprehensive status overview of all services.
-- **Quick Restart**: Restart all services with a single command.
+- **Interactive CLI Tool**: User-friendly menu system for all operations
+- **Ollama in Docker**: Easily run Ollama in a containerized environment
+- **API Auth**: Secured with Bearer token authentication
+- **Automated Setup**: One-line installation command or interactive wizard
+- **Testing Tools**: Verify your installation with a simple test script
+- **Autostart Support**: Systemd service setup for automatic startup on boot
+- **Tailscale Funnel**: Expose your Ollama instance securely over the internet
+- **Model Management**: Pull, list, remove, and run models through the CLI
+- **Status Monitoring**: Comprehensive status overview with recommendations
+- **Update System**: Preserves API tokens while updating to latest versions
+- **Clean Uninstall**: Easily remove all components with confirmation prompts
+
+## Quick Start with CLI Tool
+
+The easiest way to manage your Ollama installation is using the interactive CLI tool:
+
+```bash
+./ollama-cli
+```
+
+This provides a user-friendly menu system for all operations including setup, status checking, updates, and model management.
+
+### CLI Commands
+
+```bash
+./ollama-cli              # Interactive menu
+./ollama-cli status       # Quick status overview
+./ollama-cli setup        # Run setup wizard
+./ollama-cli update       # Update to latest version
+./ollama-cli restart      # Restart all services
+./ollama-cli help         # Show help information
+```
 
 ## Quick Install (One-Line Command)
 
@@ -30,8 +52,9 @@ This command will:
 
 ## Setup Options
 
-| Script | Purpose | Requires Sudo | Creates Systemd Services | Preserves API Token |
-|--------|---------|---------------|---------------------------|---------------------|
+| Script/Tool | Purpose | Requires Sudo | Creates Systemd Services | Preserves API Token |
+|-------------|---------|---------------|---------------------------|---------------------|
+| **`./ollama-cli`** | **Interactive management tool** | **Optional*** | **Depends on action** | **Yes** |
 | `./setup.sh` | Basic Docker setup | No | No | Yes |
 | `./systemd-setup.sh` | Enable autostart on boot | Yes | ollama-docker.service | N/A |
 | `./tailscale-setup.sh` | Enable Tailscale Funnel + autostart | Yes | ollama-docker.service<br>ollama-tailscale-funnel.service | N/A |
