@@ -8,15 +8,15 @@ echo "=========================================="
 
 # Check if running as root
 if [ "$EUID" -ne 0 ]; then
-    echo "Error: This script must be run as root (use sudo)."
-    exit 1
+  echo "Error: This script must be run as root (use sudo)."
+  exit 1
 fi
 
 # Check if tailscale is installed
-if ! command -v tailscale &> /dev/null; then
-    echo "Error: Tailscale is not installed. Please install it first:"
-    echo "  curl -fsSL https://tailscale.com/install.sh | sh"
-    exit 1
+if ! command -v tailscale &>/dev/null; then
+  echo "Error: Tailscale is not installed. Please install it first:"
+  echo "  curl -fsSL https://tailscale.com/install.sh | sh"
+  exit 1
 fi
 
 # Get the current directory
@@ -28,7 +28,7 @@ TAILSCALE_PATH=$(which tailscale)
 DOCKER_SERVICE_FILE="/etc/systemd/system/ollama-docker.service"
 echo "Creating systemd service file at: $DOCKER_SERVICE_FILE"
 
-cat > "$DOCKER_SERVICE_FILE" << EOL
+cat >"$DOCKER_SERVICE_FILE" <<EOL
 [Unit]
 Description=Ollama Docker Compose Service
 After=network.target docker.service
@@ -50,11 +50,13 @@ EOL
 TAILSCALE_SERVICE_FILE="/etc/systemd/system/ollama-tailscale-funnel.service"
 echo "Creating Tailscale Funnel service file at: $TAILSCALE_SERVICE_FILE"
 
-cat > "$TAILSCALE_SERVICE_FILE" << EOL
+cat >"$TAILSCALE_SERVICE_FILE" <<EOL
 [Unit]
 Description=Tailscale Funnel for Ollama
 After=network.target ollama-docker.service
 Requires=ollama-docker.service
+StartLimitBurst=5
+StartLimitIntervalSec=600
 
 [Service]
 Type=simple
