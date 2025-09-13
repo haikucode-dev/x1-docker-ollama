@@ -5,6 +5,57 @@ set -e
 echo "=========================================="
 echo "Ollama Docker + Tailscale Funnel Status"
 echo "=========================================="
+echo
+
+# Quick status overview
+echo "Configuration Overview:"
+echo "─────────────────────"
+
+# API Token
+if [ -f ".env" ]; then
+    echo "✓ API Token: Configured"
+else
+    echo "✗ API Token: Not configured"
+fi
+
+# Docker
+if command -v docker &> /dev/null; then
+    echo "✓ Docker: Installed"
+else
+    echo "✗ Docker: Not installed"
+fi
+
+# Docker Containers
+if docker ps 2>/dev/null | grep -q ollama; then
+    echo "✓ Ollama Container: Running"
+else
+    echo "✗ Ollama Container: Not running"
+fi
+
+# Systemd Services
+if [ -f /etc/systemd/system/ollama-docker.service ]; then
+    echo "✓ Systemd Autostart: Configured"
+else
+    echo "✗ Systemd Autostart: Not configured"
+fi
+
+# Tailscale
+if command -v tailscale &> /dev/null; then
+    echo "✓ Tailscale: Installed"
+else
+    echo "✗ Tailscale: Not installed"
+fi
+
+# Tailscale Funnel Service
+if [ -f /etc/systemd/system/ollama-tailscale-funnel.service ]; then
+    echo "✓ Tailscale Funnel Service: Configured"
+else
+    echo "✗ Tailscale Funnel Service: Not configured"
+fi
+
+echo
+echo "Detailed Status:"
+echo "═══════════════════════════════════════"
 
 # Function to check if a command exists
 command_exists() {
@@ -131,5 +182,27 @@ fi
 
 echo
 echo "=========================================="
-echo "Run './test.sh' for more detailed API tests"
+echo "Recommended Actions:"
+echo "=========================================="
+
+# Check what's missing and suggest actions
+if [ ! -f ".env" ]; then
+    echo "→ Run './setup.sh' to create API token"
+fi
+
+if ! docker ps 2>/dev/null | grep -q ollama; then
+    echo "→ Run './setup.sh' to start Docker containers"
+fi
+
+if [ ! -f /etc/systemd/system/ollama-docker.service ]; then
+    echo "→ Run 'sudo ./systemd-setup.sh' to enable autostart on boot"
+fi
+
+if command -v tailscale &> /dev/null && [ ! -f /etc/systemd/system/ollama-tailscale-funnel.service ]; then
+    echo "→ Run 'sudo ./tailscale-setup.sh' to enable Tailscale Funnel"
+fi
+
+# Always available actions
+echo "→ Run './test.sh' for detailed API tests"
+echo "→ Run './update.sh' to update to latest version"
 echo "=========================================="

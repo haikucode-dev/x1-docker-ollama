@@ -28,6 +28,65 @@ This command will:
 3. Start the Ollama service
 4. On Ubuntu systems, offer to configure autostart on boot (systemd)
 
+## Setup Options
+
+| Script | Purpose | Requires Sudo | Creates Systemd Services | Preserves API Token |
+|--------|---------|---------------|---------------------------|---------------------|
+| `./setup.sh` | Basic Docker setup | No | No | Yes |
+| `./systemd-setup.sh` | Enable autostart on boot | Yes | ollama-docker.service | N/A |
+| `./tailscale-setup.sh` | Enable Tailscale Funnel + autostart | Yes | ollama-docker.service<br>ollama-tailscale-funnel.service | N/A |
+| `./update.sh` | Update to latest version | Optional* | No (restarts existing) | Yes |
+| `./restart.sh` | Restart all services | Optional* | No | N/A |
+| `./status.sh` | Check system status | No | No | N/A |
+| `./test.sh` | Test API connectivity | No | No | N/A |
+| `./uninstall.sh` | Remove all components | Yes | Removes all | N/A |
+
+*Sudo required for systemd service operations, but script works without it for Docker operations
+
+## Common Workflows
+
+### Initial Setup
+```bash
+# Basic setup (Docker only)
+./setup.sh
+
+# Enable autostart on boot
+sudo ./systemd-setup.sh
+
+# Or, enable with Tailscale Funnel
+sudo ./tailscale-setup.sh
+```
+
+### Updating Your Installation
+```bash
+# Pull latest changes
+git pull
+
+# Update while preserving your API token
+./update.sh
+
+# Or with sudo to also restart systemd services
+sudo ./update.sh
+```
+
+### Checking System Health
+```bash
+# Get complete status overview
+./status.sh
+
+# Test API connectivity
+./test.sh
+```
+
+### Maintenance
+```bash
+# Restart all services
+sudo ./restart.sh
+
+# Complete removal
+sudo ./uninstall.sh
+```
+
 ## API Authentication
 
 The API is protected with Bearer token authentication. The setup script automatically generates a secure token and saves it in the `.env` file.

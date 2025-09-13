@@ -5,6 +5,34 @@ set -e
 echo "=========================================="
 echo "Ollama Docker Setup with API Authentication"
 echo "=========================================="
+echo
+
+# Show current configuration status
+echo "Current Configuration:"
+if [ -f .env ]; then
+    echo "✓ API token: Already configured"
+else
+    echo "✗ API token: Not configured (will create)"
+fi
+
+if docker ps 2>/dev/null | grep -q ollama; then
+    echo "✓ Docker containers: Running"
+else
+    echo "✗ Docker containers: Not running"
+fi
+
+if [ -f /etc/systemd/system/ollama-docker.service ]; then
+    echo "✓ Systemd autostart: Configured"
+else
+    echo "✗ Systemd autostart: Not configured (run sudo ./systemd-setup.sh to enable)"
+fi
+
+if [ -f /etc/systemd/system/ollama-tailscale-funnel.service ]; then
+    echo "✓ Tailscale Funnel: Configured"
+else
+    echo "✗ Tailscale Funnel: Not configured (run sudo ./tailscale-setup.sh to enable)"
+fi
+echo
 
 # Check for docker
 if ! command -v docker &> /dev/null; then
